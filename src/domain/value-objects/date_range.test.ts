@@ -49,12 +49,11 @@ describe('DataRange Value Object', () => {
     });
 
     it("deve laçar erro se a data de inicio e término forem iguais",() =>{
-        const startDate = new Date("2024-12-20");
-        const endDate = new Date("2024-12-20");
-
+        const date = new Date("2024-12-20");
+        
         expect(() => {
-            new DateRange(startDate, endDate);
-        }).toThrow("A data de término deve ser posterior à data de início");
+            new DateRange(date,date);
+        }).toThrow("A data de início e término não podem ser iguais");
 
     });
 });

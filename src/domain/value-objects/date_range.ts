@@ -10,9 +10,17 @@ export class DateRange {
 
         this.startDate = startDate;
         this.endDate = endDate;
+        this.validateDates(startDate, endDate);
+    }
 
-        if (endDate <= startDate) {
-            throw new Error("A data de término deve ser posterior à data de início")
+    private validateDates(startDate: Date, endDate: Date): void {
+
+        if (endDate == startDate) {
+            throw new Error("A data de início e término não podem ser iguais");
+        }
+
+        if (endDate < startDate) {
+            throw new Error("A data de término deve ser posterior à data de início");
         }
     }
 
