@@ -1,3 +1,5 @@
+import { DateRange } from "../value-objects/date_range";
+
 export class Property {
   constructor(
     private id: string,
@@ -47,5 +49,15 @@ export class Property {
         `O número máximo de hóspedes excedido. Máximo permitido: ${this.maxGuests}.`,
       );
     }
+  }
+
+  calculateTotalPrice(dateRange: DateRange): number {
+    const totalNights = dateRange.getTotalNights();
+    let totalPrice = totalNights * this.getBasePricePerNight();
+
+    if (totalNights >= 7) {
+      totalPrice *= 0.9;
+    }
+    return totalPrice;
   }
 }

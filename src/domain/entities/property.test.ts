@@ -1,4 +1,5 @@
 import { Property } from "./property";
+import { DateRange } from "../value-objects/date_range";
 
 describe("Property Entity", () => {
   it("Deve criar uma instância de Property com todos os atributos", () => {
@@ -35,5 +36,48 @@ describe("Property Entity", () => {
     expect(() => {
       property.validateMaxGuests(6);
     }).toThrow("O número máximo de hóspedes excedido. Máximo permitido: 5.");
+  });
+
+  it("não deve aplicar desconto para estadias menores que 7 noites", () => {
+    const property = new Property(
+      "1",
+      "Apartamento",
+      "vista para o mar",
+      2,
+      100,
+    );
+    const dateRange = new DateRange(
+      new Date("2025-03-10"),
+      new Date("2025-03-16"),
+    );
+
+    const totalPrice = property.calculateTotalPrice(dateRange);
+    expect(totalPrice).toBe(600);
+  });
+
+  it("deve aplicar desconto para estadias de 7 noites ou mais", () => {
+    const property = new Property(
+      "1",
+      "Apartamento",
+      "vista para o mar",
+      2,
+      100,
+    );
+    const dateRangeSevenDays = new DateRange(
+      new Date("2025-03-10"),
+      new Date("2025-03-17"),
+    );
+
+    const dateRangeNineDays = new DateRange(
+      new Date("2025-03-10"),
+      new Date("2025-03-19"),
+    );
+
+    const totalPriceSevenDays =
+      property.calculateTotalPrice(dateRangeSevenDays);
+    expect(totalPriceSevenDays).toBe(630);
+
+    const totalPriceNineDays = property.calculateTotalPrice(dateRangeNineDays);
+    expect(totalPriceNineDays).toBe(810);
   });
 });
