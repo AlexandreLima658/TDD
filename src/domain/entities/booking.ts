@@ -8,6 +8,7 @@ export class Booking {
   private readonly guest: User;
   private readonly dateRange: DateRange;
   private readonly guestCount: number;
+  private readonly status: Status;
 
   constructor(
     id: string,
@@ -16,11 +17,20 @@ export class Booking {
     dateRange: DateRange,
     guestCount: number,
   ) {
+    if (guestCount <= 0) {
+      throw new Error("O número de hóspedes deve ser maior que zero");
+    }
+
+    property.validateMaxGuests(guestCount);
+
     this.id = id;
     this.property = property;
     this.guest = guest;
     this.dateRange = dateRange;
     this.guestCount = guestCount;
+    this.status = Status.CONFIMERD;
+
+    property.addBooking(this);
   }
 
   getId(): string {
@@ -42,4 +52,13 @@ export class Booking {
   getGuestCount(): number {
     return this.guestCount;
   }
+
+  getStatus(): Status {
+    return this.status;
+  }
+}
+
+export enum Status {
+  CONFIMERD,
+  CANCELLED,
 }

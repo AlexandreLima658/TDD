@@ -17,4 +17,30 @@ describe("Booking entity", () => {
     expect(booking.getDateRange()).toBe(dateRange);
     expect(booking.getGuestCount()).toBe(2);
   });
+
+  it("deve lançar erro se o número de hóspedes for menor que zero", () => {
+    const property = new Property("1", "casa", "casa de campo", 5, 150);
+    const user = new User("1", "Ana");
+    const dateRange = new DateRange(
+      new Date("2024-12-10"),
+      new Date("2024-12-15"),
+    );
+
+    expect(() => {
+      new Booking("1", property, user, dateRange, 0);
+    }).toThrow("O número de hóspedes deve ser maior que zero");
+  });
+
+  it("deve lançar erro ao tentar reservar com número de hóspedes acima do máximo permitido", () => {
+    const property = new Property("1", "casa", "casa de campo", 4, 150);
+    const user = new User("1", "Ana");
+    const dateRange = new DateRange(
+      new Date("2024-12-10"),
+      new Date("2024-12-15"),
+    );
+
+    expect(() => {
+      new Booking("1", property, user, dateRange, 5);
+    }).toThrow("O número máximo de hóspedes excedido. Máximo permitido: 4.");
+  });
 });
